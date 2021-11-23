@@ -44,7 +44,7 @@ li {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
-    "poster  title title"
-    "poster  list list"
-    "poster  plot plot";
+    "poster poster title title"
+    "poster poster list list"
+    "poster poster plot plot";
 }

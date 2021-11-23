@@ -36,62 +36,70 @@ export class Movies extends Component {
       isLoading: true,
     });
 
-    try {
-      let idArray = await axios
-        .get(`http://www.omdbapi.com/?s=${search}&apikey=96779e86`)
-        .then((response) => response.data.Search.map((item) => item.imdbID))
-        .catch((error) => {
-          console.log(error);
-          this.setState({
-            isLoading: false,
-            isError: true,
-            errorMessage: error,
-          });
-        });
-
-      console.log(idArray);
-      let promise = idArray.map(async (item) => {
-        return await axios.get(
-          `http://www.omdbapi.com/?i=${item}&apikey=96779e86`
-        );
+    if (search === "") {
+      this.setState({
+        isLoading: false,
+        isError: true,
+        errorMessage: "Search field cannot be empty",
       });
-
-      Promise.all(promise)
-        .then((result) => {
-          let promisedArray = result.map((item) => item.data);
-          console.log(promisedArray);
-          this.setState({
-            searchArray: promisedArray,
-            isLoading: false,
+    } else {
+      try {
+        let idArray = await axios
+          .get(`http://www.omdbapi.com/?s=${search}&apikey=96779e86`)
+          .then((response) => response.data.Search.map((item) => item.imdbID))
+          .catch((error) => {
+            console.log(error);
+            this.setState({
+              isLoading: false,
+              isError: true,
+              errorMessage: error,
+            });
           });
-          console.log("search array", this.state.searchArray);
-        })
-        .catch((e) => {
+
+        console.log(idArray);
+        let promise = idArray.map(async (item) => {
+          return await axios.get(
+            `http://www.omdbapi.com/?i=${item}&apikey=96779e86`
+          );
+        });
+
+        Promise.all(promise)
+          .then((result) => {
+            let promisedArray = result.map((item) => item.data);
+            console.log(promisedArray);
+            this.setState({
+              searchArray: promisedArray,
+              isLoading: false,
+            });
+            console.log("search array", this.state.searchArray);
+          })
+          .catch((e) => {
+            this.setState({
+              isLoading: false,
+              isError: true,
+              errorMessage: e.response,
+            });
+
+            console.log(this.state.errorMessage);
+          });
+      } catch (e) {
+        console.log(e.reponse);
+
+        if (e && e.reponse === 404) {
           this.setState({
             isLoading: false,
             isError: true,
-            errorMessage: e.response,
+            errorMessage: e.response.data,
           });
+        }
 
-          console.log(this.state.errorMessage);
-        });
-    } catch (e) {
-      console.log(e.reponse);
-
-      if (e && e.reponse === 404) {
-        this.setState({
-          isLoading: false,
-          isError: true,
-          errorMessage: e.response.data,
-        });
-      }
-      console.log(this.state.isError);
-      if (this.state.searchArray.length === 0) {
-        this.setState({
-          isLoading: false,
-          isError: true,
-          errorMessage: e.response.data,
-        });
+        if (this.state.searchArray.length === 0) {
+          this.setState({
+            isLoading: false,
+            isError: true,
+            errorMessage: e.response.data,
+          });
+        }
       }
     }
   };
@@ -111,6 +119,9 @@ export class Movies extends Component {
         <div className="search-bar">
           <input type="text" name="search" onChange={this.handleOnChange} />
           <button onClick={this.handleOnClick}>Search</button>
+          {this.state.isError ? (
+            <span style={{ color: "red" }}>{this.state.errorMessage}</span>
+          ) : null}
         </div>
         <div className="results-container">
           {this.state.isLoading ? (
