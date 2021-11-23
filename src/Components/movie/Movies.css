@@ -1,0 +1,34 @@
+.container {
+  margin: 20%;
+}
+.results-container {
+  display: grid;
+  gap: 4rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  place-content: center;
+  height: 100%;
+}
+
+.result-cell {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: red;
+  margin-bottom: 1em;
+}
+
+figcaption {
+  text-align: center;
+  margin: 1em 0 0 0;
+}
+
+img {
+  width: 70%;
+  height: 85%;
+  object-fit: fill;
+  transition: ease-in-out 0.5s all;
+}
+img:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}

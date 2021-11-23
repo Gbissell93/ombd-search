@@ -1,0 +1,50 @@
+.container {
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  list-style: none;
+}
+li {
+  margin: 1em 0 0 1em;
+}
+.poster {
+  display: flex;
+  grid-area: poster;
+  align-items: center;
+  justify-content: flex-end;
+  align-content: center;
+}
+.title {
+  grid-area: title;
+}
+.movie-detail-list {
+  grid-area: list;
+}
+.plot {
+  grid-area: plot;
+}
+
+.movie-details-container {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "poster  title title"
+    "poster  list list"
+    "poster  plot plot";
+}
